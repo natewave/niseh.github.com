@@ -1,1 +1,129 @@
-It works !
+<html>
+  <head>
+
+    <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="inspector-detector.js"></script>
+
+  </head>
+  <body>
+
+    <style>
+      body {
+        background-image: url(wavegrid.png);
+        font-family: 'Dosis',sans-serif;
+      }
+
+      .caption {
+        font-weight: bold;
+        font-size: 120%;
+        font-style: italic;
+      }
+
+      .nse-box {
+        width: 280px;
+        position: relative;
+        padding: 10px;
+        margin: 0 auto;
+        margin-top: 80px;
+        text-align: center;
+        background: white;
+        -moz-box-shadow: 0 1px 1px #999;
+        -webkit-box-shadow: 0 1px 1px #999;
+        box-shadow: 0 1px 1px #999;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+      }
+
+      .nse-box::before, .nse-box::after {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        bottom: 15px;
+        left: 10px;
+        width: 50%;
+        top: 80%;
+        max-width: 300px;
+        background: rgba(0, 0, 0, 0.7);
+        -webkit-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+        -moz-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+        box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+        -webkit-transform: rotate(-3deg);
+        -moz-transform: rotate(-3deg);
+        -o-transform: rotate(-3deg);
+        -ms-transform: rotate(-3deg);
+        transform: rotate(-3deg);
+      }
+
+      .nse-box::after {
+        -webkit-transform: rotate(3deg);
+        -moz-transform: rotate(3deg);
+        -o-transform: rotate(3deg);
+        -ms-transform: rotate(3deg);
+        transform: rotate(3deg);
+        right: 10px;
+        left: auto;
+      }
+
+    </style>
+
+    <div id="website">
+      <div id="Element" >
+        <div class="nse-box">
+          <img src="http://pcdn.500px.net/29057805/1499ce29a179e610d2b208f5593cea2050bc7612/3.jpg">
+          <p class="caption">
+            Inspect me!
+          </p>
+        </div>
+      </div>
+    </div>
+    <p id="restricted" style="display:none">Error: <strong>This website can't be inspected!</strong><br><br> You won't play with our DOM, go home!</p>
+
+    <script>
+      var element = document.getElementById("Element");
+      var top = document.getElementById("website");
+
+      var remove = function() {
+        var child = document.getElementById("Element");
+        var parent = document.getElementById("website");
+
+        if (parent && child) {
+          parent.removeChild(child);
+        }
+      };
+
+      var insert = function() {
+        var child = document.getElementById("Element");
+        var parent = document.getElementById("website");
+
+        if(parent && !child) {
+          parent.appendChild(element);
+        }
+      };
+
+      (function(){
+
+          var detect = function() {
+              var detector = chrome.inspector.detector(),
+                  wait = detector.open ? 1500 : 100
+              ;
+              if (detector.open) {
+                  remove();
+                  $("#restricted").show();
+                  $(document.body).css('background-image', 'none');
+              }
+               else {
+                  insert();
+                  $("#restricted").hide();
+                  $(document.body).css('background-image', 'url(wavegrid.png)');
+              }
+              setTimeout(detect, wait);
+          };
+          detect();
+      })();
+
+    </script>
+  </body>
+</html>
